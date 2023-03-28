@@ -65,14 +65,14 @@ def get_subdomains(dirty_subs):
                 pass
 
 def get_screenshots():
-    active = 0
     for p in ['http', 'https']:
         for sub in subdomains:
             url = '{}://{}'.format(p, sub)
             try:
                 res = req.get(url, timeout=25)
                 if res.ok:
-                    active += 1
+                    if sub not in active:
+                        active.add(sub)
 
                     # Take screenshot
                     driver = webdriver.Firefox()
@@ -87,7 +87,7 @@ def get_screenshots():
             except:
                 pass
 
-    print('[+] {}/{} Active subdomains found'.format(active, len(subdomains)))
+    print('[+] {}/{} Active subdomains found'.format(len(active), len(subdomains)))
 
 def get_banner():
     print('   _____ _____ _______ _____ _           _   ')
@@ -101,5 +101,6 @@ def get_banner():
 
 if __name__ == '__main__':
     subdomains = set()
+    active = set()
     main()
 
